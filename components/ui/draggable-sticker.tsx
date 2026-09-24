@@ -1,6 +1,7 @@
 'use client'
 
 import { clampStickerPosition, type StickerDefinition, type StickerPosition } from '@/lib/stickers'
+import { playStickerSound } from '@/lib/sticker-sounds'
 import { useDrag } from '@use-gesture/react'
 import Image from 'next/image'
 import { memo, useEffect, useRef, useState } from 'react'
@@ -27,6 +28,7 @@ export const DraggableSticker = memo(function DraggableSticker({
 }: DraggableStickerProps) {
   const element = useRef<HTMLButtonElement>(null)
   const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const activePointer = useRef<number | null>(null)
   const [dragging, setDragging] = useState(false)
   const [settling, setSettling] = useState(false)
   const [tilt, setTilt] = useState(0)
@@ -62,6 +64,7 @@ export const DraggableSticker = memo(function DraggableSticker({
       }
 
       if (last) {
+        releaseSound()
         setDragging(false)
         setSettling(true)
         setTilt(0)
@@ -79,6 +82,12 @@ export const DraggableSticker = memo(function DraggableSticker({
       pointer: { touch: true },
     },
   )
+
+  function releaseSound(pointerId?: number) {
+    if (activePointer.current === null || (pointerId !== undefined && activePointer.current !== pointerId)) return
+    activePointer.current = null
+    playStickerSound('release')
+  }
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     const directions: Record<string, [number, number]> = {
@@ -130,6 +139,14 @@ export const DraggableSticker = memo(function DraggableSticker({
       data-dragging={dragging}
       data-settling={settling}
       data-resetting={resetting}
+      onPointerDownCapture={(event) => {
+        if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0) || activePointer.current !== null)
+          return
+        activePointer.current = event.pointerId
+        playStickerSound(sticker.id === 'cat' ? 'cat' : 'tick')
+      }}
+      onPointerUpCapture={(event) => releaseSound(event.pointerId)}
+      onPointerCancelCapture={(event) => releaseSound(event.pointerId)}
       onKeyDown={onKeyDown}
       style={style}
     >

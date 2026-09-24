@@ -2,6 +2,7 @@
 
 import '@/styles/stickers.css'
 import { clampStickerPosition, type StickerDefinition, type StickerPosition } from '@/lib/stickers'
+import { playStickerSound } from '@/lib/sticker-sounds'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DraggableSticker } from './draggable-sticker'
 import { StickerReset } from './sticker-reset'
@@ -107,6 +108,7 @@ export function StickerPlayground({ stickers }: { stickers: readonly StickerDefi
   )
 
   function reset() {
+    playStickerSound('sparkle')
     if (resetTimer.current) clearTimeout(resetTimer.current)
     setResetting(true)
     setPositionMap(initialPositions(stickers))
