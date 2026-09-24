@@ -1,0 +1,278 @@
+:root {
+  --sticker-shadow-x: 2px;
+  --sticker-shadow-x-drag: 6px;
+  --sticker-shadow-pad: 33px;
+}
+
+.sticker-playground {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - var(--sticker-home-shift, 0px));
+  width: 100vw;
+  overflow-x: clip;
+  overflow-y: visible;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.sticker-shell {
+  position: absolute;
+  top: calc(var(--sticker-top-mobile) + 3vh);
+  left: clamp(
+    var(--sticker-shadow-pad),
+    var(--sticker-left-mobile),
+    calc(100% - var(--sticker-width-mobile) - var(--sticker-shadow-pad))
+  );
+  width: var(--sticker-width-mobile);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sticker-shell:active,
+.sticker-shell[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.sticker-shell:focus-visible {
+  border-radius: 12px;
+  outline: 2px solid #3b82f6b3;
+  outline-offset: 7px;
+}
+
+.sticker-shell[data-resetting='true']:not([data-dragging='true']) {
+  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sticker-enter,
+.sticker-lift,
+.sticker-bob,
+.sticker-bend {
+  display: block;
+}
+
+.sticker-enter {
+  animation: sticker-enter 0.52s cubic-bezier(0.23, 1, 0.32, 1) var(--enter-delay) backwards;
+}
+
+.sticker-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sticker-lift {
+  perspective: 520px;
+  transform: scale(1) rotate(var(--drag-tilt, 0deg));
+  transform-origin: 50% 58%;
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sticker-shell[data-dragging='true'] .sticker-lift {
+  transform: scale(1.045) rotate(var(--drag-tilt, 0deg));
+}
+
+.sticker-shell[data-settling='true']:not([data-dragging='true']) .sticker-lift {
+  animation: sticker-lift-settle 0.36s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.sticker-bob {
+  transform: rotate(var(--rest-rotate));
+  transform-origin: 50% 58%;
+}
+
+.sticker-bend {
+  position: relative;
+  transform: rotateX(0) scaleY(1);
+  transform-origin: var(--grab-x, 50%) var(--grab-y, 58%);
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sticker-bend::before {
+  position: absolute;
+  z-index: -1;
+  inset: var(--sticker-shadow-inset);
+  content: '';
+  opacity: 0.3;
+  pointer-events: none;
+  background-image: var(--sticker-shadow-src);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transform: translateX(var(--sticker-shadow-x));
+  transition:
+    transform 0.24s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.24s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.dark .sticker-bend::before {
+  opacity: 0.72;
+}
+
+.sticker-shell[data-dragging='true'] .sticker-bend {
+  transform: rotateX(7deg) scaleY(0.966) translateY(-1px);
+}
+
+.sticker-shell[data-dragging='true'] .sticker-bend::before {
+  opacity: 0.26;
+  transform: translateX(var(--sticker-shadow-x-drag)) translateY(4%) scale(1.03);
+}
+
+.dark .sticker-shell[data-dragging='true'] .sticker-bend::before {
+  opacity: 0.6;
+}
+
+.sticker-shell[data-settling='true']:not([data-dragging='true']) .sticker-bend {
+  animation: sticker-bend-settle 0.28s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.sticker-art {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: clip;
+  contain: paint;
+}
+
+.sticker-crease {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  opacity: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at var(--grab-x, 50%) var(--grab-y, 52%), #ffffff94 0, #fff3 25%, transparent 52%),
+    linear-gradient(180deg, #ffffff42, transparent 42%, #0000001c);
+  mask-image: var(--sticker-mask);
+  -webkit-mask-image: var(--sticker-mask);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  transform: translateY(-3px) scaleY(0.92);
+  transform-origin: var(--grab-x, 50%) var(--grab-y, 52%);
+}
+
+.sticker-shell[data-dragging='true'] .sticker-crease {
+  opacity: 0.52;
+  transform: translateY(-1px) scaleY(1);
+  transition:
+    opacity 0.13s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.13s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sticker-shell[data-settling='true']:not([data-dragging='true']) .sticker-crease {
+  animation: sticker-crease-settle 0.28s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sticker-shell:not([data-dragging='true']):hover .sticker-bend::before {
+    opacity: 0.34;
+    transform: translateX(var(--sticker-shadow-x)) translateY(1%) scale(1);
+  }
+}
+
+@media (min-width: 640px) {
+  .sticker-playground {
+    --sticker-home-shift: 8px;
+  }
+
+  .sticker-shell {
+    top: var(--sticker-offset-y);
+    left: clamp(
+      var(--sticker-shadow-pad),
+      calc(50% + var(--sticker-offset-x) + var(--sticker-home-shift)),
+      calc(100% - var(--sticker-width) - var(--sticker-shadow-pad))
+    );
+    width: var(--sticker-width);
+  }
+}
+
+@media (min-width: 768px) {
+  .sticker-playground {
+    --sticker-home-shift: 32px;
+  }
+}
+
+@keyframes sticker-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0) scale(1);
+  }
+}
+
+@keyframes sticker-lift-settle {
+  0% {
+    transform: translateY(-1px) scale(1.045);
+  }
+  46% {
+    transform: translateY(1px) scale(0.988);
+  }
+  74% {
+    transform: translateY(0) scale(1.006);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sticker-bend-settle {
+  0% {
+    transform: rotateX(7deg) scaleY(0.966) translateY(-1px);
+  }
+  58% {
+    transform: rotateX(-2deg) scaleY(1.012) translateY(0);
+  }
+  to {
+    transform: rotateX(0) scaleY(1) translateY(0);
+  }
+}
+
+@keyframes sticker-crease-settle {
+  0% {
+    opacity: 0.46;
+    transform: translateY(-1px) scaleY(1);
+  }
+  55% {
+    opacity: 0.16;
+    transform: translateY(1px) scaleY(1.05);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker-enter,
+  .sticker-shell[data-settling='true'] .sticker-lift,
+  .sticker-shell[data-settling='true'] .sticker-bend,
+  .sticker-shell[data-settling='true'] .sticker-crease {
+    animation: none;
+  }
+
+  .sticker-shell[data-resetting='true'],
+  .sticker-lift,
+  .sticker-bend {
+    transition: none;
+  }
+}
