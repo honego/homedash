@@ -7,7 +7,11 @@ export function StickerReset({ visible, onReset }: { visible: boolean; onReset: 
         tabIndex={visible ? 0 : -1}
         disabled={!visible}
         onClick={onReset}
-        className={`inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1.5 font-medium text-[12px] text-muted-subtle transition-all duration-300 hover:text-stone-700 dark:hover:text-stone-200 ${visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-1 opacity-0'}`}
+        className={`inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1.5
+          font-medium text-[12px] text-muted-subtle transition-all duration-300
+          hover:text-stone-700 dark:hover:text-stone-200 ${
+            visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-1 opacity-0'
+          }`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
