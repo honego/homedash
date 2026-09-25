@@ -1,5 +1,3 @@
-'use client'
-
 import { clampStickerPosition, type StickerDefinition, type StickerPosition } from '@/lib/stickers'
 import { playStickerSound } from '@/lib/sticker-sounds'
 import { useDrag } from '@use-gesture/react'
@@ -134,7 +132,7 @@ export const DraggableSticker = memo(function DraggableSticker({
       type="button"
       aria-label={`拖动 ${sticker.id} 贴纸`}
       title={`拖动 ${sticker.id} 贴纸`}
-      className="sticker-shell sticker-shell-image"
+      className="sticker-shell"
       data-sticker-id={sticker.id}
       data-dragging={dragging}
       data-settling={settling}
@@ -154,7 +152,7 @@ export const DraggableSticker = memo(function DraggableSticker({
         <span className="sticker-lift">
           <span className="sticker-bob">
             <span className="sticker-bend">
-              <span className="sticker-art sticker-art-image">
+              <span className="sticker-art">
                 <Image
                   alt={sticker.id}
                   src={sticker.image}

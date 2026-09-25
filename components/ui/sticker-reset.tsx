@@ -1,5 +1,3 @@
-'use client'
-
 export function StickerReset({ visible, onReset }: { visible: boolean; onReset: () => void }) {
   return (
     <div className="absolute right-0 -bottom-1 z-40 sm:right-4 sm:-bottom-3">

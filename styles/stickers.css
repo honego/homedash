@@ -25,8 +25,6 @@
     calc(100% - var(--sticker-width-mobile) - var(--sticker-shadow-pad))
   );
   width: var(--sticker-width-mobile);
-  margin: 0;
-  padding: 0;
   border: 0;
   background: none;
   color: inherit;
@@ -142,7 +140,6 @@
 .sticker-art {
   position: relative;
   display: block;
-  box-sizing: border-box;
   width: 100%;
   overflow: clip;
   contain: paint;

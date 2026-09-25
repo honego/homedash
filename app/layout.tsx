@@ -2,7 +2,6 @@ import '../styles/global.css'
 import { PageShell } from '@/components/layout/page-shell'
 import { ThemeScript } from '@/components/layout/theme-script'
 import { siteConfig } from '@/config/site'
-import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
@@ -38,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang={siteConfig.locale}
-      className={`bg-white text-black dark:bg-[#111010] dark:text-white ${GeistSans.variable} ${GeistMono.variable}`}
+      className={`bg-white text-black dark:bg-[#111010] dark:text-white ${GeistSans.variable}`}
     >
       <head>
         <ThemeScript />

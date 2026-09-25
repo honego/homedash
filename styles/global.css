@@ -14,12 +14,8 @@
   }
 }
 
-html.dark {
-  color-scheme: dark;
-}
-
 ::selection {
-  @apply bg-stone-800;
+  @apply bg-neutral-200/50;
 }
 
 .text-muted-subtle {
